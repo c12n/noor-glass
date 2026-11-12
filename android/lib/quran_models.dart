@@ -6,7 +6,6 @@
 // QuranModels.swift / QuranLyrics.swift.
 
 import 'dart:convert';
-import 'dart:ui' show Color;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -311,7 +310,7 @@ class QuranTextData {
 
 // MARK: - Ayah timing estimates (character-weighted, as iOS)
 
-int _weight(QuranAyahText ayah) => ayah.ar.length < 1 ? 1 : ayah.ar.length;
+int _weight(QuranAyahText ayah) => ayah.ar.isEmpty ? 1 : ayah.ar.length;
 
 /// Estimated current ayah index: playback fraction applied across
 /// the ayahs weighted by Arabic character count.

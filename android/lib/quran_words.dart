@@ -69,7 +69,7 @@ class QuranWords {
     if (ayahFraction <= 0) return 0;
     if (ayahFraction >= 1) return words.length - 1;
     final weights = [
-      for (final w in words) w.ar.length < 1 ? 1 : w.ar.length
+      for (final w in words) w.ar.isEmpty ? 1 : w.ar.length
     ];
     final total = weights.fold<int>(0, (a, b) => a + b);
     if (total <= 0) return 0;
