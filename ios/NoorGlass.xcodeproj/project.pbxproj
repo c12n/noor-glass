@@ -1,0 +1,453 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = { };
+	objectVersion = 77;
+	objects = {
+		54E674EB91FC4EBD91966498 /* NoorGlass.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; path = NoorGlass.app; sourceTree = "BUILT_PRODUCTS_DIR"; };
+		F58410A87CBA478E9FE3B86E /* NoorGlassApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoorGlassApp.swift; sourceTree = "<group>"; };
+		F2F6001D92B744A8A7B4C7EA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		F0BD84B69BF94AFF8F8F23EA /* NoorTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoorTheme.swift; sourceTree = "<group>"; };
+		037CB5021B00404997976C5A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1F444DE6E02C40858DBE8696 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		E96EE43448B14C59A8BDAA76 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		50E846B5D04A46F0A794377E /* QuranModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranModels.swift; sourceTree = "<group>"; };
+		DB2BEAB322854260974DAE80 /* QuranPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranPlayer.swift; sourceTree = "<group>"; };
+		8FCED2F9FFBA416C99384C4F /* QuranLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranLibraryView.swift; sourceTree = "<group>"; };
+		670D270A84794E13B5261CD0 /* NowPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingView.swift; sourceTree = "<group>"; };
+		F045B2AD4A7F4628B2B85B73 /* QuranLyrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranLyrics.swift; sourceTree = "<group>"; };
+		20779CA6702A412A9EC53667 /* QuranDownloads.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranDownloads.swift; sourceTree = "<group>"; };
+		18D6CCCAC23149A7820DC1F6 /* MiniPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniPlayerView.swift; sourceTree = "<group>"; };
+		E6D92A6FCB5E4E4AA5DD510F /* surahs.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = surahs.json; sourceTree = "<group>"; };
+		34FDBB38C6454B3C86A941A9 /* quran_text.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = quran_text.json; sourceTree = "<group>"; };
+		59FB3CECEADE4970ACD37E03 /* en_durations.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = en_durations.json; sourceTree = "<group>"; };
+		BA3C2BE55BEB4FF58DB7C175 /* QuranModels.swift in Sources/Resources */ = {isa = PBXBuildFile; fileRef = 50E846B5D04A46F0A794377E /* QuranModels.swift */; };
+		5B611A6BE19D4DC6805FD2C8 /* QuranPlayer.swift in Sources/Resources */ = {isa = PBXBuildFile; fileRef = DB2BEAB322854260974DAE80 /* QuranPlayer.swift */; };
+		0C8A1283566C4134A2216423 /* QuranLibraryView.swift in Sources/Resources */ = {isa = PBXBuildFile; fileRef = 8FCED2F9FFBA416C99384C4F /* QuranLibraryView.swift */; };
+		CB9BFBA4D96944BAA90CC649 /* NowPlayingView.swift in Sources/Resources */ = {isa = PBXBuildFile; fileRef = 670D270A84794E13B5261CD0 /* NowPlayingView.swift */; };
+		8212DD7C45314A5EB73BEDC2 /* QuranLyrics.swift in Sources/Resources */ = {isa = PBXBuildFile; fileRef = F045B2AD4A7F4628B2B85B73 /* QuranLyrics.swift */; };
+		4911D667B0C047C4AF1A753E /* QuranDownloads.swift in Sources/Resources */ = {isa = PBXBuildFile; fileRef = 20779CA6702A412A9EC53667 /* QuranDownloads.swift */; };
+		29161515D6DC4B5986C6FFCA /* MiniPlayerView.swift in Sources/Resources */ = {isa = PBXBuildFile; fileRef = 18D6CCCAC23149A7820DC1F6 /* MiniPlayerView.swift */; };
+		43A7F1DA99FD4E22B67BCC75 /* surahs.json in Sources/Resources */ = {isa = PBXBuildFile; fileRef = E6D92A6FCB5E4E4AA5DD510F /* surahs.json */; };
+		6F0936B6765C43E8807FD1CD /* quran_text.json in Sources/Resources */ = {isa = PBXBuildFile; fileRef = 34FDBB38C6454B3C86A941A9 /* quran_text.json */; };
+		6B569F192003402AB87BC706 /* en_durations.json in Sources/Resources */ = {isa = PBXBuildFile; fileRef = 59FB3CECEADE4970ACD37E03 /* en_durations.json */; };
+		4E0982CC08AE4090B8AF3C8B /* NoorGlassApp.swift in Sources/Resources */ = {isa = PBXBuildFile; fileRef = F58410A87CBA478E9FE3B86E /* NoorGlassApp.swift */; };
+		BD87CDD9049D47E48B755D46 /* ContentView.swift in Sources/Resources */ = {isa = PBXBuildFile; fileRef = F2F6001D92B744A8A7B4C7EA /* ContentView.swift */; };
+		B4C0B3F899F14B91A2669A77 /* NoorTheme.swift in Sources/Resources */ = {isa = PBXBuildFile; fileRef = F0BD84B69BF94AFF8F8F23EA /* NoorTheme.swift */; };
+		336E95232CA94675B810A01B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E96EE43448B14C59A8BDAA76 /* Assets.xcassets */; };
+		C0674EDB4CA44A5C884F7EC6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1F444DE6E02C40858DBE8696 /* LaunchScreen.storyboard */; };
+		9BA2BC3A40E445E1842AE2C2 /* Quran */ = {
+			isa = PBXGroup;
+			children = (
+				50E846B5D04A46F0A794377E /* QuranModels.swift */,
+				DB2BEAB322854260974DAE80 /* QuranPlayer.swift */,
+				8FCED2F9FFBA416C99384C4F /* QuranLibraryView.swift */,
+				670D270A84794E13B5261CD0 /* NowPlayingView.swift */,
+				F045B2AD4A7F4628B2B85B73 /* QuranLyrics.swift */,
+				20779CA6702A412A9EC53667 /* QuranDownloads.swift */,
+				18D6CCCAC23149A7820DC1F6 /* MiniPlayerView.swift */,
+				A20000000000000000000004 /* QuranExtras.swift */,
+				A20000000000000000000005 /* MushafView.swift */,
+				A20000000000000000000006 /* QuranSearchView.swift */,
+				A20000000000000000000007 /* FeatureViews.swift */,
+				E6D92A6FCB5E4E4AA5DD510F /* surahs.json */,
+				A20000000000000000000008 /* quran_fr.json */,
+				A20000000000000000000009 /* mushaf_pages.json */,
+				34FDBB38C6454B3C86A941A9 /* quran_text.json */,
+				59FB3CECEADE4970ACD37E03 /* en_durations.json */,
+			);
+			path = Quran;
+			sourceTree = "<group>";
+		};
+		440A5CE8A5224E0DBB96CF16 /* NoorGlass */ = {
+			isa = PBXGroup;
+			children = (
+				F58410A87CBA478E9FE3B86E /* NoorGlassApp.swift */,
+				F2F6001D92B744A8A7B4C7EA /* ContentView.swift */,
+				F0BD84B69BF94AFF8F8F23EA /* NoorTheme.swift */,
+				A20000000000000000000001 /* NoorAppearance.swift */,
+				A20000000000000000000002 /* DailyAyah.swift */,
+				A2000000000000000000000A /* NoorGlass.entitlements */,
+				9BA2BC3A40E445E1842AE2C2 /* Quran */,
+				E96EE43448B14C59A8BDAA76 /* Assets.xcassets */,
+				1F444DE6E02C40858DBE8696 /* LaunchScreen.storyboard */,
+				037CB5021B00404997976C5A /* Info.plist */,
+			);
+			path = NoorGlass;
+			sourceTree = "<group>";
+		};
+		BEF33EC126BD4CCDA9A7CAE4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				54E674EB91FC4EBD91966498 /* NoorGlass.app */,
+				A20000000000000000000003 /* NoorGlassWidgets.appex */,
+			);
+			sourceTree = "<group>";
+		};
+		1585CF14CD0D460AB9AD771A /* MainGroup */ = {
+			isa = PBXGroup;
+			children = (
+				440A5CE8A5224E0DBB96CF16 /* NoorGlass */,
+				A2000000000000000000000E /* Widgets */,
+				BEF33EC126BD4CCDA9A7CAE4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		EF7DE3FBDDA94A6F86C5D662 /* NoorGlass */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 67DC66051F5845DC813A9DEB /* Build configuration list for PBXNativeTarget "NoorGlass" */;
+			buildPhases = (
+				4A1655917FBC470DBA290DF4 /* Sources */,
+				996287441F3F44389DED52C8 /* Frameworks */,
+				7E646919163045FEA473C719 /* Resources */,
+				A20000000000000000000021 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A2000000000000000000001D /* PBXTargetDependency */,
+			);
+			name = NoorGlass;
+			productName = NoorGlass;
+			productReference = 54E674EB91FC4EBD91966498 /* NoorGlass.app */;
+			productType = "com.apple.product-type.application";
+		};
+		55D9A644E42842A5AAF2F5BB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2700;
+				LastUpgradeCheck = 2700;
+				TargetAttributes = {
+					EF7DE3FBDDA94A6F86C5D662 = {
+						CreatedOnToolsVersion = 27.2;
+					};
+					A2000000000000000000001B = {
+						CreatedOnToolsVersion = 27.2;
+					};
+				};
+			};
+			buildConfigurationList = 90E7CF6B74DA4933A2852EE9 /* Build configuration list for PBXProject "NoorGlass" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1585CF14CD0D460AB9AD771A;
+			productRefGroup = BEF33EC126BD4CCDA9A7CAE4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				EF7DE3FBDDA94A6F86C5D662 /* NoorGlass */,
+				A2000000000000000000001B /* NoorGlassWidgets */,
+			);
+		};
+		4A1655917FBC470DBA290DF4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E0982CC08AE4090B8AF3C8B /* NoorGlassApp.swift in Sources/Resources */,
+				BD87CDD9049D47E48B755D46 /* ContentView.swift in Sources/Resources */,
+				B4C0B3F899F14B91A2669A77 /* NoorTheme.swift in Sources/Resources */,
+				BA3C2BE55BEB4FF58DB7C175 /* QuranModels.swift in Sources/Resources */,
+				5B611A6BE19D4DC6805FD2C8 /* QuranPlayer.swift in Sources/Resources */,
+				0C8A1283566C4134A2216423 /* QuranLibraryView.swift in Sources/Resources */,
+				CB9BFBA4D96944BAA90CC649 /* NowPlayingView.swift in Sources/Resources */,
+				8212DD7C45314A5EB73BEDC2 /* QuranLyrics.swift in Sources/Resources */,
+				4911D667B0C047C4AF1A753E /* QuranDownloads.swift in Sources/Resources */,
+				29161515D6DC4B5986C6FFCA /* MiniPlayerView.swift in Sources/Resources */,
+				A2000000000000000000000F /* NoorAppearance.swift in Sources */,
+				A20000000000000000000010 /* DailyAyah.swift in Sources */,
+				A20000000000000000000011 /* QuranExtras.swift in Sources */,
+				A20000000000000000000012 /* MushafView.swift in Sources */,
+				A20000000000000000000013 /* QuranSearchView.swift in Sources */,
+				A20000000000000000000014 /* FeatureViews.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7E646919163045FEA473C719 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				336E95232CA94675B810A01B /* Assets.xcassets in Sources/Resources */,
+				C0674EDB4CA44A5C884F7EC6 /* LaunchScreen.storyboard in Sources/Resources */,
+				43A7F1DA99FD4E22B67BCC75 /* surahs.json in Sources/Resources */,
+				6F0936B6765C43E8807FD1CD /* quran_text.json in Sources/Resources */,
+				6B569F192003402AB87BC706 /* en_durations.json in Sources/Resources */,
+				A20000000000000000000015 /* quran_fr.json in Resources */,
+				A20000000000000000000016 /* mushaf_pages.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		996287441F3F44389DED52C8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CD4DDE8888454236B2E2BA5B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				SWIFT_VERSION = 5.0;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		86B351E1F8264144B77651EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				SWIFT_VERSION = 5.0;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		1060002F42484DA88C494099 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = NoorGlass/NoorGlass.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = NoorGlass/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.c12n.noorglass;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C83CA55DDEFF495B8F687F2A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = NoorGlass/NoorGlass.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = NoorGlass/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.c12n.noorglass;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		90E7CF6B74DA4933A2852EE9 /* Build configuration list for PBXProject "NoorGlass" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CD4DDE8888454236B2E2BA5B /* Debug */,
+				86B351E1F8264144B77651EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		67DC66051F5845DC813A9DEB /* Build configuration list for PBXNativeTarget "NoorGlass" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1060002F42484DA88C494099 /* Debug */,
+				C83CA55DDEFF495B8F687F2A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A20000000000000000000001 /* NoorAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoorAppearance.swift; sourceTree = "<group>"; };
+		A20000000000000000000002 /* DailyAyah.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyAyah.swift; sourceTree = "<group>"; };
+		A20000000000000000000003 /* NoorGlassWidgets.appex */ = {isa = PBXFileReference; lastKnownFileType = wrapper.app-extension; path = NoorGlassWidgets.appex; sourceTree = "BUILT_PRODUCTS_DIR"; };
+		A20000000000000000000004 /* QuranExtras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranExtras.swift; sourceTree = "<group>"; };
+		A20000000000000000000005 /* MushafView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MushafView.swift; sourceTree = "<group>"; };
+		A20000000000000000000006 /* QuranSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranSearchView.swift; sourceTree = "<group>"; };
+		A20000000000000000000007 /* FeatureViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureViews.swift; sourceTree = "<group>"; };
+		A20000000000000000000008 /* quran_fr.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = quran_fr.json; sourceTree = "<group>"; };
+		A20000000000000000000009 /* mushaf_pages.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = mushaf_pages.json; sourceTree = "<group>"; };
+		A2000000000000000000000A /* NoorGlass.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NoorGlass.entitlements; sourceTree = "<group>"; };
+		A2000000000000000000000B /* NoorWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoorWidgets.swift; sourceTree = "<group>"; };
+		A2000000000000000000000C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A2000000000000000000000D /* NoorWidgets.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NoorWidgets.entitlements; sourceTree = "<group>"; };
+		A2000000000000000000000F /* NoorAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000001 /* NoorAppearance.swift */; };
+		A20000000000000000000010 /* DailyAyah.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000002 /* DailyAyah.swift */; };
+		A20000000000000000000011 /* QuranExtras.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000004 /* QuranExtras.swift */; };
+		A20000000000000000000012 /* MushafView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000005 /* MushafView.swift */; };
+		A20000000000000000000013 /* QuranSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000006 /* QuranSearchView.swift */; };
+		A20000000000000000000014 /* FeatureViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000007 /* FeatureViews.swift */; };
+		A20000000000000000000015 /* quran_fr.json in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000008 /* quran_fr.json */; };
+		A20000000000000000000016 /* mushaf_pages.json in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000009 /* mushaf_pages.json */; };
+		A20000000000000000000017 /* NoorWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000B /* NoorWidgets.swift */; };
+		A20000000000000000000018 /* NoorAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000001 /* NoorAppearance.swift */; };
+		A20000000000000000000019 /* DailyAyah.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000002 /* DailyAyah.swift */; };
+		A2000000000000000000001A /* NoorGlassWidgets.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A20000000000000000000003 /* NoorGlassWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A2000000000000000000000E /* Widgets */ = {
+			isa = PBXGroup;
+			children = (
+				A2000000000000000000000B /* NoorWidgets.swift */,
+				A2000000000000000000000C /* Info.plist */,
+				A2000000000000000000000D /* NoorWidgets.entitlements */,
+			);
+			path = Widgets;
+			sourceTree = "<group>";
+		};
+		A2000000000000000000001C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 55D9A644E42842A5AAF2F5BB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A2000000000000000000001B;
+			remoteInfo = NoorGlassWidgets;
+		};
+		A2000000000000000000001D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A2000000000000000000001B /* NoorGlassWidgets */;
+			targetProxy = A2000000000000000000001C /* PBXContainerItemProxy */;
+		};
+		A2000000000000000000001B /* NoorGlassWidgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A20000000000000000000024 /* Build configuration list for PBXNativeTarget "NoorGlassWidgets" */;
+			buildPhases = (
+				A2000000000000000000001E /* Sources */,
+				A2000000000000000000001F /* Frameworks */,
+				A20000000000000000000020 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NoorGlassWidgets;
+			productName = NoorGlassWidgets;
+			productReference = A20000000000000000000003 /* NoorGlassWidgets.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		A2000000000000000000001E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A20000000000000000000017 /* NoorWidgets.swift in Sources */,
+				A20000000000000000000018 /* NoorAppearance.swift in Sources */,
+				A20000000000000000000019 /* DailyAyah.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A2000000000000000000001F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A20000000000000000000020 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A20000000000000000000021 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A2000000000000000000001A /* NoorGlassWidgets.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A20000000000000000000022 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Widgets/NoorWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Widgets/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.c12n.noorglass.widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+					DEBUG,
+					NOOR_WIDGET,
+				);
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A20000000000000000000023 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Widgets/NoorWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Widgets/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.c12n.noorglass.widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+					NOOR_WIDGET,
+				);
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		A20000000000000000000024 /* Build configuration list for PBXNativeTarget "NoorGlassWidgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A20000000000000000000022 /* Debug */,
+				A20000000000000000000023 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+	};
+	rootObject = 55D9A644E42842A5AAF2F5BB /* Project object */;
+}

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Noor Glass Mockup</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:-apple-system,'SF Pro Display','Segoe UI',Roboto,sans-serif; }
+  body { background:#0d120f; padding:38px; }
+  h1 { color:#f0ead6; font-size:32px; letter-spacing:.2px; }
+  h1 .gold { color:#e9d48a; }
+  .sub { color:#9db4a8; font-size:16px; margin:6px 0 8px; max-width:1180px; line-height:1.45; }
+  .rowlabel { color:#e9d48a; font-size:19px; font-weight:700; margin:30px 0 16px; }
+  .rowlabel span { color:#8fa79a; font-weight:400; font-size:15px; }
+  .grid { display:flex; flex-wrap:wrap; gap:36px; }
+  .cell { width:375px; }
+  .cap { color:#e6dfca; font-size:16px; font-weight:600; margin-top:13px; text-align:center; }
+  .cap span { color:#8fa79a; font-weight:400; display:block; font-size:13.5px; margin-top:3px; line-height:1.4; }
+
+  /* ---------- shared phone ---------- */
+  .phone { width:375px; height:760px; border-radius:52px; position:relative; overflow:hidden;
+           box-shadow:0 24px 60px rgba(0,0,0,.55), 0 0 0 10px #1b1f1c, 0 0 0 12px #3a403b; }
+  .notch { position:absolute; top:11px; left:50%; transform:translateX(-50%); width:112px; height:29px; background:#000; border-radius:16px; z-index:50; }
+  .status { position:absolute; top:0; left:0; right:0; height:48px; display:flex; justify-content:space-between; align-items:center; padding:6px 30px 0; z-index:40; font-size:14.5px; font-weight:600; }
+  .homebar { position:absolute; bottom:7px; left:50%; transform:translateX(-50%); width:130px; height:5px; border-radius:3px; z-index:60; }
+
+  /* ---------- iOS Liquid Glass ---------- */
+  .ios { background:
+      radial-gradient(560px 380px at 88% -60px, rgba(233,212,138,.50), rgba(233,212,138,0) 62%),
+      radial-gradient(520px 460px at -140px 300px, rgba(11,122,85,.55), rgba(11,122,85,0) 65%),
+      radial-gradient(600px 500px at 110% 78%, rgba(14,90,64,.5), rgba(14,90,64,0) 60%),
+      linear-gradient(168deg, #eef3ec 0%, #dcecdf 46%, #cfe3d4 100%);
+    color:#0b3d2e; }
+  .ios .status { color:#0b3d2e; }
+  .ios .homebar { background:rgba(11,61,46,.75); }
+  .glass { background:rgba(255,255,255,.42); backdrop-filter:blur(22px) saturate(1.7); -webkit-backdrop-filter:blur(22px) saturate(1.7);
+           border:1px solid rgba(255,255,255,.75); box-shadow:0 10px 28px rgba(11,61,46,.14), inset 0 1px 0 rgba(255,255,255,.9); border-radius:28px; }
+  .glass-deep { background:linear-gradient(160deg, rgba(14,90,64,.88), rgba(6,35,26,.94)); color:#f4f1e4;
+           border:1px solid rgba(233,212,138,.38); box-shadow:0 16px 34px rgba(6,35,26,.35), inset 0 1px 0 rgba(255,255,255,.22); border-radius:30px; }
+  .ios-body { position:absolute; inset:0; padding:60px 20px 0; }
+  .ios h2.appname { font-size:31px; font-weight:800; letter-spacing:-.4px; }
+  .ios .tagline { color:#38604f; font-size:14.5px; margin-top:2px; }
+  .search { margin-top:16px; display:flex; align-items:center; gap:9px; padding:12px 16px; border-radius:999px; color:#5b7567; font-size:15.5px; }
+  .sect { display:flex; justify-content:space-between; align-items:baseline; margin:20px 2px 10px; }
+  .sect b { font-size:17.5px; } .sect span { color:#0e5a40; font-size:13.5px; font-weight:600; }
+  .cont { padding:16px 18px; display:flex; gap:14px; align-items:center; }
+  .art-sm { width:56px; height:56px; border-radius:17px; flex:none; display:flex; align-items:center; justify-content:center;
+            background:linear-gradient(150deg,#0e5a40,#06231a); color:#e9d48a; font-size:24px;
+            box-shadow:inset 0 0 0 1px rgba(233,212,138,.45), 0 6px 14px rgba(6,35,26,.3); }
+  .cont b { font-size:16.5px; display:block; } .cont small { color:#476354; font-size:13px; }
+  .playball { width:44px; height:44px; border-radius:50%; flex:none; margin-left:auto; display:flex; align-items:center; justify-content:center;
+              background:linear-gradient(150deg,#f2cd5c,#d4af37); color:#0b3d2e; font-size:17px;
+              box-shadow:0 8px 18px rgba(212,175,55,.45), inset 0 1px 0 rgba(255,255,255,.8); }
+  .prog { height:5px; border-radius:3px; background:rgba(11,61,46,.16); margin-top:11px; overflow:hidden; }
+  .prog i { display:block; height:100%; width:38%; border-radius:3px; background:linear-gradient(90deg,#0e5a40,#d4af37); }
+  .chips { display:flex; gap:9px; }
+  .chip { flex:1; padding:13px 12px; border-radius:22px; }
+  .chip .ic { font-size:19px; } .chip b { display:block; font-size:14.5px; margin-top:5px; } .chip small { color:#476354; font-size:12px; }
+  .srow { display:flex; align-items:center; gap:13px; padding:12px 14px; margin-top:9px; }
+  .num { width:38px; height:38px; flex:none; position:relative; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:#0e5a40; }
+  .num:before { content:""; position:absolute; inset:0; border:1.6px solid rgba(14,90,64,.55); border-radius:11px; transform:rotate(45deg); }
+  .srow b { font-size:16px; display:block; } .srow small { color:#5b7567; font-size:12.5px; }
+  .srow .ar { margin-left:auto; font-size:20px; color:#0b3d2e; }
+  .dl { color:#0e5a40; font-size:15px; margin-left:8px; }
+  .tabbar { position:absolute; left:18px; right:18px; bottom:20px; height:66px; border-radius:34px; display:flex; align-items:center; justify-content:space-around; padding:0 8px; z-index:45; }
+  .tab { display:flex; flex-direction:column; align-items:center; gap:2px; font-size:10.5px; color:#54705f; padding:8px 13px; }
+  .tab .ic { font-size:20px; }
+  .tab.on { color:#0b3d2e; font-weight:700; background:rgba(255,255,255,.65); border:1px solid rgba(255,255,255,.9); border-radius:24px; box-shadow:0 4px 12px rgba(11,61,46,.15); }
+  .mini { position:absolute; left:18px; right:18px; bottom:96px; height:62px; border-radius:24px; display:flex; align-items:center; gap:11px; padding:0 14px 0 10px; z-index:44; }
+  .mini b { font-size:14.5px; display:block; } .mini small { color:#476354; font-size:12px; }
+
+  /* iOS Now Playing */
+  .np { background:linear-gradient(178deg,#0e5a3f 0%, #0b3d2e 44%, #06231a 100%); color:#f4f1e4; }
+  .np .status { color:#f4f1e4; } .np .homebar { background:rgba(244,241,228,.8); }
+  .np-body { position:absolute; inset:0; padding:64px 24px 0; text-align:center; }
+  .np .chev { text-align:left; font-size:19px; color:#bf-d8cc; color:#bfd8cc; }
+  .np-art { width:238px; height:238px; margin:24px auto 0; border-radius:50%;
+            background:radial-gradient(circle at 34% 30%, #14604a, #0b3d2e 58%, #06231a);
+            border:1px solid rgba(233,212,138,.5); display:flex; align-items:center; justify-content:center;
+            box-shadow:0 26px 50px rgba(0,0,0,.45), inset 0 0 60px rgba(233,212,138,.14); position:relative; }
+  .np-art .ring { position:absolute; inset:17px; border:1px solid rgba(233,212,138,.35); border-radius:50%; }
+  .np-art .arab { font-size:52px; color:#e9d48a; }
+  .np h3 { font-size:24px; margin-top:26px; } .np .rec { color:#bfd8cc; font-size:15px; margin-top:4px; }
+  .np .track { height:6px; border-radius:3px; background:rgba(255,255,255,.22); margin-top:28px; }
+  .np .track i { display:block; height:100%; width:31%; border-radius:3px; background:linear-gradient(90deg,#e9d48a,#d4af37); }
+  .np .times { display:flex; justify-content:space-between; color:#bfd8cc; font-size:12.5px; margin-top:7px; }
+  .np .ctrls { display:flex; align-items:center; justify-content:space-between; margin-top:20px; padding:0 8px; font-size:23px; color:#e8e4d2; }
+  .np .bigplay { width:70px; height:70px; border-radius:50%; background:linear-gradient(150deg,#f2cd5c,#d4af37); color:#0b3d2e; display:flex; align-items:center; justify-content:center; font-size:27px; box-shadow:0 12px 26px rgba(212,175,55,.4); }
+  .np .row2 { display:flex; gap:9px; margin-top:24px; }
+  .np .pill { flex:1; padding:10px 4px; border-radius:999px; background:rgba(255,255,255,.13); border:1px solid rgba(255,255,255,.24); font-size:12.5px; color:#e8e4d2; }
+  .np .pill.on { background:rgba(212,175,55,.26); border-color:rgba(233,212,138,.6); color:#f2cd5c; }
+  .lycard { margin-top:16px; text-align:left; padding:16px 18px; border-radius:26px; background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.20); }
+  .lycard small { color:#e9d48a; font-weight:700; font-size:11.5px; letter-spacing:1.1px; }
+  .lycard .ar { font-size:21px; line-height:1.9; margin-top:6px; text-align:right; color:#f7f3e3; }
+  .lycard .en { font-size:13.5px; color:#bfd8cc; margin-top:3px; line-height:1.45; }
+
+  /* iOS Lyrics */
+  .ayah { padding:12px 16px; margin-top:9px; }
+  .ayah .meta { display:flex; justify-content:space-between; align-items:center; }
+  .ayah .n { font-size:12px; font-weight:700; color:#0e5a40; background:rgba(14,90,64,.12); padding:4px 10px; border-radius:999px; }
+  .ayah .bm { color:#b08a1e; font-size:16px; }
+  .ayah .ar { font-size:21px; line-height:1.85; text-align:right; margin-top:8px; color:#123c2d; }
+  .ayah .en { font-size:14px; line-height:1.5; color:#476354; margin-top:5px; }
+  .ayah.now { background:linear-gradient(160deg, rgba(14,90,64,.92), rgba(6,35,26,.96)); border-color:rgba(233,212,138,.55); }
+  .ayah.now .ar { color:#f7f3e3; } .ayah.now .en { color:#bfd8cc; }
+  .ayah.now .n { background:rgba(212,175,55,.3); color:#f2cd5c; } .ayah.now .bm { color:#f2cd5c; }
+  .loopbar { display:flex; gap:9px; align-items:center; padding:12px 16px; margin-top:14px; font-size:13.5px; }
+  .loopbar .on { color:#0e5a40; font-weight:700; }
+</style></head>
+<body>
+<h1>Noor <span class="gold">Glass</span></h1>
+<p class="sub">Standalone Quran app split out of Prayer YEG. Same deep green and gold Quran palette throughout, by design. iOS gets true Liquid Glass: translucent glass cards, a floating glass tab bar and a glass mini player over a soft light aurora. Android gets Material 3 Expressive: expressive shapes, a wavy progress bar, dynamic green colour and big pill controls. Pick a direction, or mix and match rows.</p>
+
+<div class="rowlabel">iOS | Liquid Glass <span>SwiftUI, iOS 26</span></div>
+<div class="grid">
+
+  <div class="cell">
+    <div class="phone ios">
+      <div class="notch"></div><div class="status"><span>9:41</span><span>􀙇 􀛨 􀋦</span></div>
+      <div class="ios-body">
+        <h2 class="appname">Noor Glass</h2>
+        <div class="tagline">Listen and read | 114 surahs</div>
+        <div class="search glass"><span>􀊫</span> Search surahs, reciters</div>
+        <div class="sect"><b>Continue Listening</b><span>Downloads</span></div>
+        <div class="cont glass-deep">
+          <div class="art-sm">يس</div>
+          <div><b>Ya-Sin</b><small style="color:#bfd8cc;">Alafasy | Ayah 41 of 83</small><div class="prog"><i></i></div></div>
+          <div class="playball">▶</div>
+        </div>
+        <div class="sect"><b>Collections</b></div>
+        <div class="chips">
+          <div class="chip glass"><div class="ic">☾</div><b>Ramadan</b><small>12 surahs</small></div>
+          <div class="chip glass"><div class="ic">♥</div><b>Favourites</b><small>6 surahs</small></div>
+          <div class="chip glass"><div class="ic">✦</div><b>Eid</b><small>5 surahs</small></div>
+        </div>
+        <div class="sect"><b>Surahs</b><span>Reciter: Alafasy ▾</span></div>
+        <div class="srow glass"><div class="num">36</div><div><b>Ya-Sin</b><small>83 ayahs | Makki</small></div><span class="ar">يس</span></div>
+        <div class="srow glass"><div class="num">18</div><div><b>Al-Kahf</b><small>110 ayahs | Makki</small></div><span class="dl">⬇</span><span class="ar">الكهف</span></div>
+      </div>
+      <div class="mini glass"><div class="art-sm" style="width:42px;height:42px;border-radius:13px;font-size:18px;">يس</div><div><b>Ya-Sin</b><small>Alafasy</small></div><span style="margin-left:auto;font-size:19px;">⏸</span><span style="font-size:19px;">⏭</span></div>
+      <div class="tabbar glass">
+        <div class="tab on"><span class="ic">􀫊</span>Library</div><div class="tab"><span class="ic">􀋥</span>Favourites</div><div class="tab"><span class="ic">􀈩</span>Downloads</div><div class="tab"><span class="ic">􀣌</span>Settings</div>
+      </div>
+      <div class="homebar"></div>
+    </div>
+    <div class="cap">1 | iOS Library<span>Glass cards and search over a light aurora. Floating glass tab bar, glass mini player, deep green Continue Listening card like a record sleeve.</span></div>
+  </div>
+
+  <div class="cell">
+    <div class="phone np">
+      <div class="notch"></div><div class="status"><span>9:41</span><span>􀙇 􀛨 􀋦</span></div>
+      <div class="np-body">
+        <div class="chev">⌄</div>
+        <div class="np-art"><div class="ring"></div><div class="arab">يس</div></div>
+        <h3>Ya-Sin</h3><div class="rec">Mishary Rashid Alafasy | Surah 36</div>
+        <div class="track"><i></i></div><div class="times"><span>12:04</span><span>-26:31</span></div>
+        <div class="ctrls"><span style="font-size:20px;">⇄</span><span>⏮</span><div class="bigplay">⏸</div><span>⏭</span><span style="font-size:21px;">↻</span></div>
+        <div class="row2"><div class="pill on">🌙 Sleep 20 min</div><div class="pill">Lyrics: Arabic + EN</div><div class="pill">Queue 4</div></div>
+        <div class="lycard"><small>LYRICS | TAP AN AYAH TO SEEK</small><div class="ar">وَجَعَلْنَا مِن بَيْنِ أَيْدِيهِمْ سَدًّا</div><div class="en">And We have put before them a barrier... (36:9)</div></div>
+      </div>
+      <div class="homebar"></div>
+    </div>
+    <div class="cap">2 | iOS Now Playing<span>Deep green sleeve, gold disc art. Lyrics card sits under the controls, the spot you picked in Prayer YEG. Sleep timer and queue as glass pills.</span></div>
+  </div>
+
+  <div class="cell">
+    <div class="phone ios">
+      <div class="notch"></div><div class="status"><span>9:41</span><span>􀙇 􀛨 􀋦</span></div>
+      <div class="ios-body">
+        <h2 class="appname" style="font-size:24px;">Al-Fatiha</h2>
+        <div class="tagline">The Opening | 7 ayahs | Alafasy</div>
+        <div class="loopbar glass"><span>↻</span><span class="on">Memorization loop on</span><span style="color:#476354;">Ayahs 1 to 3 | x5</span><span style="margin-left:auto;">⏸</span></div>
+        <div class="ayah glass now"><div class="meta"><span class="n">AYAH 1 | PLAYING</span><span class="bm">🔖</span></div><div class="ar">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div><div class="en">In the name of Allah, the Most Gracious, the Most Merciful.</div></div>
+        <div class="ayah glass"><div class="meta"><span class="n">AYAH 2</span><span class="bm">🔖</span></div><div class="ar">الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ</div><div class="en">All praise is due to Allah, Lord of the worlds.</div></div>
+        <div class="ayah glass"><div class="meta"><span class="n">AYAH 3</span><span class="bm" style="color:#9db4a8;">🔖</span></div><div class="ar">الرَّحْمَٰنِ الرَّحِيمِ</div><div class="en">The Most Gracious, the Most Merciful.</div></div>
+      </div>
+      <div class="mini glass"><div class="art-sm" style="width:42px;height:42px;border-radius:13px;font-size:15px;">١</div><div><b>Al-Fatiha</b><small>Ayah 1 | Loop x3 of 5</small></div><span style="margin-left:auto;font-size:19px;">⏸</span></div>
+      <div class="homebar"></div>
+    </div>
+    <div class="cap">3 | iOS Lyrics<span>Current ayah flips to deep green glass, the rest stay light glass. Arabic Uthmani plus Saheeh International English. Bookmarks and the loop bar on top.</span></div>
+  </div>
+</div>
+
+<style>
+  /* ---------- Android Material 3 Expressive ---------- */
+  .and { background:linear-gradient(170deg,#f2f7ef 0%, #e2efe1 55%, #d4e8d2 100%); color:#0c2b1e; border-radius:44px; }
+  .and .status { color:#0c2b1e; } .and .homebar { background:rgba(12,43,30,.7); width:104px; }
+  .and-body { position:absolute; inset:0; padding:58px 20px 0; }
+  .and h2.appname { font-size:33px; font-weight:800; letter-spacing:-.5px; }
+  .and .tagline { color:#3f6152; font-size:14.5px; margin-top:2px; }
+  .and .search { margin-top:16px; background:#ffffff; border-radius:999px; box-shadow:0 4px 14px rgba(12,43,30,.10); color:#5b7567; }
+  .m3card { background:#ffffff; border-radius:32px; box-shadow:0 6px 18px rgba(12,43,30,.08); }
+  .m3deep { background:linear-gradient(155deg,#14604a,#06231a); color:#f4f1e4; border-radius:36px 36px 36px 14px; box-shadow:0 14px 28px rgba(6,35,26,.28); }
+  .m3chip { border-radius:999px; padding:12px 10px; text-align:left; }
+  .m3chip.c1 { background:#cdeeda; border-radius:26px 26px 26px 10px; }
+  .m3chip.c2 { background:#f6e3a1; border-radius:26px; }
+  .m3chip.c3 { background:#bcdcc8; border-radius:10px 26px 26px 26px; }
+  .m3chip b { color:#0c2b1e; } .m3chip small { color:#3f6152; }
+  .m3row { background:#ffffff; border-radius:24px; box-shadow:0 3px 10px rgba(12,43,30,.06); }
+  .m3num { width:40px; height:40px; border-radius:14px 14px 14px 5px; background:#dff2e4; color:#0e5a40; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13.5px; flex:none; }
+  .navbar { position:absolute; left:0; right:0; bottom:0; height:86px; background:rgba(255,255,255,.92); display:flex; justify-content:space-around; align-items:flex-start; padding-top:12px; z-index:45; }
+  .ntab { display:flex; flex-direction:column; align-items:center; gap:4px; font-size:11.5px; color:#54705f; }
+  .ntab .pip { width:54px; height:30px; border-radius:999px; display:flex; align-items:center; justify-content:center; font-size:17px; }
+  .ntab.on { color:#0c2b1e; font-weight:700; } .ntab.on .pip { background:#bfe6cf; }
+  .and .mini { bottom:98px; left:16px; right:16px; background:#0b3d2e; color:#f4f1e4; border-radius:22px; box-shadow:0 12px 24px rgba(6,35,26,.35); }
+  .and .mini small { color:#bfd8cc; }
+  .fab { position:absolute; right:18px; bottom:186px; width:58px; height:58px; border-radius:19px; background:linear-gradient(150deg,#f2cd5c,#d4af37); color:#0b3d2e; display:flex; align-items:center; justify-content:center; font-size:23px; box-shadow:0 12px 22px rgba(212,175,55,.45); z-index:46; }
+  .wavy { font-size:21px; letter-spacing:-2.5px; color:#d4af37; overflow:hidden; white-space:nowrap; line-height:1; }
+  .and-np { background:linear-gradient(175deg,#175c43 0%, #0b3d2e 48%, #06231a 100%); color:#f4f1e4; border-radius:44px; }
+  .and-np .status { color:#f4f1e4; } .and-np .homebar { background:rgba(244,241,228,.8); width:104px; }
+  .and-np .np-art { border-radius:44px 44px 44px 16px; width:232px; height:232px; }
+  .and-np .np-art .ring { border-radius:36px 36px 36px 12px; }
+  .and-np .bigplay { width:76px; height:56px; border-radius:999px; font-size:24px; }
+  .and-np .pill { border-radius:16px; }
+  .and .ayah { background:#ffffff; border-radius:26px; box-shadow:0 4px 12px rgba(12,43,30,.07); border:none; }
+  .and .ayah.now { background:linear-gradient(160deg,#14604a,#06231a); border-radius:26px 26px 26px 10px; }
+  .and .loopbar { background:#f6e3a1; border-radius:20px; box-shadow:0 4px 12px rgba(12,43,30,.08); }
+</style>
+
+<div class="rowlabel">Android | Material 3 Expressive <span>Compose, dynamic green</span></div>
+<div class="grid">
+
+  <div class="cell">
+    <div class="phone and">
+      <div class="status"><span>9:41</span><span>􀙇 􀛨 􀋦</span></div>
+      <div class="and-body">
+        <h2 class="appname">Noor Glass</h2>
+        <div class="tagline">Listen and read | 114 surahs</div>
+        <div class="search"><span>⌕</span> Search surahs, reciters</div>
+        <div class="sect"><b>Continue Listening</b><span>Downloads</span></div>
+        <div class="cont m3deep">
+          <div class="art-sm">يس</div>
+          <div><b>Ya-Sin</b><small style="color:#bfd8cc;">Alafasy | Ayah 41 of 83</small><div class="prog" style="background:rgba(255,255,255,.22);"><i></i></div></div>
+          <div class="playball">▶</div>
+        </div>
+        <div class="sect"><b>Collections</b></div>
+        <div class="chips">
+          <div class="chip m3chip c1"><div class="ic">☾</div><b>Ramadan</b><small>12 surahs</small></div>
+          <div class="chip m3chip c2"><div class="ic">♥</div><b>Favourites</b><small>6 surahs</small></div>
+          <div class="chip m3chip c3"><div class="ic">✦</div><b>Eid</b><small>5 surahs</small></div>
+        </div>
+        <div class="sect"><b>Surahs</b><span>Reciter: Alafasy ▾</span></div>
+        <div class="srow m3row"><div class="m3num">36</div><div><b>Ya-Sin</b><small>83 ayahs | Makki</small></div><span class="ar">يس</span></div>
+        <div class="srow m3row"><div class="m3num">18</div><div><b>Al-Kahf</b><small>110 ayahs | Makki</small></div><span class="dl">⬇</span><span class="ar">الكهف</span></div>
+      </div>
+      
+      <div class="mini"><div class="art-sm" style="width:42px;height:42px;border-radius:13px;font-size:18px;">يس</div><div><b>Ya-Sin</b><small>Alafasy</small></div><span style="margin-left:auto;font-size:19px;">⏸</span><span style="font-size:19px;">⏭</span></div>
+      <div class="navbar">
+        <div class="ntab on"><span class="pip">􀫊</span>Library</div><div class="ntab"><span class="pip">􀋥</span>Favourites</div><div class="ntab"><span class="pip">􀈩</span>Downloads</div><div class="ntab"><span class="pip">􀣌</span>Settings</div>
+      </div>
+      <div class="homebar"></div>
+    </div>
+    <div class="cap">4 | Android Library<span>Same content, Expressive shapes: one-corner-cut cards and the Material navigation bar with its pill indicator.</span></div>
+  </div>
+
+  <div class="cell">
+    <div class="phone np and-np">
+      <div class="status"><span>9:41</span><span>􀙇 􀛨 􀋦</span></div>
+      <div class="np-body">
+        <div class="chev">⌄</div>
+        <div class="np-art"><div class="ring"></div><div class="arab">يس</div></div>
+        <h3>Ya-Sin</h3><div class="rec">Mishary Rashid Alafasy | Surah 36</div>
+        <div class="wavy" style="margin-top:26px;">∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿</div>
+        <div class="times"><span>12:04</span><span>-26:31</span></div>
+        <div class="ctrls"><span style="font-size:20px;">⇄</span><span>⏮</span><div class="bigplay">⏸</div><span>⏭</span><span style="font-size:21px;">↻</span></div>
+        <div class="row2"><div class="pill on">🌙 Sleep 20 min</div><div class="pill">Lyrics: Arabic + EN</div><div class="pill">Queue 4</div></div>
+        <div class="lycard"><small>LYRICS | TAP AN AYAH TO SEEK</small><div class="ar">وَجَعَلْنَا مِن بَيْنِ أَيْدِيهِمْ سَدًّا</div><div class="en">And We have put before them a barrier... (36:9)</div></div>
+      </div>
+      <div class="homebar"></div>
+    </div>
+    <div class="cap">5 | Android Now Playing<span>Expressive signatures: the wavy progress bar, a wide pill play button, and squircle artwork instead of the iOS disc.</span></div>
+  </div>
+
+  <div class="cell">
+    <div class="phone and">
+      <div class="status"><span>9:41</span><span>􀙇 􀛨 􀋦</span></div>
+      <div class="and-body">
+        <h2 class="appname" style="font-size:24px;">Al-Fatiha</h2>
+        <div class="tagline">The Opening | 7 ayahs | Alafasy</div>
+        <div class="loopbar"><span>↻</span><span class="on">Memorization loop on</span><span style="color:#6b5a1e;">Ayahs 1 to 3 | x5</span><span style="margin-left:auto;">⏸</span></div>
+        <div class="ayah now"><div class="meta"><span class="n">AYAH 1 | PLAYING</span><span class="bm">🔖</span></div><div class="ar">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div><div class="en">In the name of Allah, the Most Gracious, the Most Merciful.</div></div>
+        <div class="ayah"><div class="meta"><span class="n">AYAH 2</span><span class="bm">🔖</span></div><div class="ar">الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ</div><div class="en">All praise is due to Allah, Lord of the worlds.</div></div>
+        <div class="ayah"><div class="meta"><span class="n">AYAH 3</span><span class="bm" style="color:#9db4a8;">🔖</span></div><div class="ar">الرَّحْمَٰنِ الرَّحِيمِ</div><div class="en">The Most Gracious, the Most Merciful.</div></div>
+      </div>
+      <div class="mini" style="bottom:20px;"><div class="art-sm" style="width:42px;height:42px;border-radius:13px;font-size:15px;">١</div><div><b>Al-Fatiha</b><small>Ayah 1 | Loop x3 of 5</small></div><span style="margin-left:auto;font-size:19px;">⏸</span></div>
+      <div class="homebar"></div>
+    </div>
+    <div class="cap">6 | Android Lyrics<span>Same ayah cards, Material styling: white expressive cards, a gold loop bar, and the playing ayah as a cut-corner deep green card.</span></div>
+  </div>
+</div>
+</body></html>

@@ -1,0 +1,9 @@
+# Build outputs
+ios/build/
+android/build/
+android/.dart_tool/
+android/.packages
+*.ipa
+*.apk
+# Local tooling records
+*.muse-github-snapshot-sync.json
