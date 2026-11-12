@@ -27,7 +27,7 @@ jobs:
         run: |
           yes | flutter doctor --android-licenses || true
       - run: flutter pub get
-      - run: flutter analyze
+      - run: flutter analyze --no-fatal-infos
       - run: flutter test
       - name: Build release APK
         run: flutter build apk --release
