@@ -20,47 +20,70 @@ struct MiniPlayerView: View {
     var body: some View {
         if let surah = player.currentSurah {
             VStack(spacing: 0) {
-                HStack(spacing: 12) {
+                // Build 3 layout: the pill now gets its own
+                // full-width row (safe-area inset in ContentView,
+                // not the squeezed tab-bar accessory), so the tile,
+                // titles and transport controls each get real room:
+                // 40 pt tile, titles truncate cleanly at the tail
+                // (no shrink-to-fit), fixed-size controls.
+                HStack(spacing: 10) {
                     Button(action: onOpen) {
-                        HStack(spacing: 12) {
+                        HStack(spacing: 10) {
                             Text(surah.arabic)
                                 .font(.headline)
                                 .foregroundStyle(QuranTheme.deepGreen)
                                 .lineLimit(1)
-                                .minimumScaleFactor(0.6)
-                                .frame(width: 42, height: 42)
+                                .minimumScaleFactor(0.5)
+                                .padding(.horizontal, 2)
+                                .frame(width: 40, height: 40)
                                 .background(
                                     LinearGradient(colors: [QuranTheme.lightGold, QuranTheme.gold],
                                                    startPoint: .topLeading, endPoint: .bottomTrailing),
-                                    in: RoundedRectangle(cornerRadius: 9, style: .continuous))
+                                    in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+                                .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                             VStack(alignment: .leading, spacing: 1) {
-                                // Build 38: shrink to fit instead of
-                                // cutting the surah name off with "…".
                                 Text(surah.english)
                                     .font(.subheadline.weight(.bold))
                                     .foregroundStyle(.white)
                                     .lineLimit(1)
-                                    .minimumScaleFactor(0.6)
-                                Text(player.currentReciter?.name ?? "")
-                                    .font(.caption)
-                                    .foregroundStyle(QuranTheme.mutedOnGreen)
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.6)
+                                if let playbackError = player.playbackError {
+                                    // Build 3 failure surface: a
+                                    // failed stream says so here
+                                    // instead of posing as playing.
+                                    // Play retries the load.
+                                    Label(playbackError, systemImage: "exclamationmark.triangle.fill")
+                                        .font(.caption.weight(.semibold))
+                                        .foregroundStyle(.yellow)
+                                        .lineLimit(1)
+                                } else {
+                                    Text(player.currentReciter?.name ?? "")
+                                        .font(.caption)
+                                        .foregroundStyle(QuranTheme.mutedOnGreen)
+                                        .lineLimit(1)
+                                }
                             }
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
                     .buttonStyle(.plain)
 
-                    Spacer(minLength: 4)
-
                     transportButton("backward.end.fill") { player.previous() }
-                    transportButton(player.isPlaying ? "pause.fill" : "play.fill") {
-                        player.togglePlayPause()
+                    if player.isBuffering && player.playbackError == nil {
+                        // Told to play but AVFoundation is still
+                        // waiting for data: a spinner here instead
+                        // of a pause glyph over silence.
+                        ProgressView()
+                            .tint(.white)
+                            .frame(width: 36, height: 36)
+                    } else {
+                        transportButton(player.isPlaying ? "pause.fill" : "play.fill") {
+                            player.togglePlayPause()
+                        }
                     }
                     transportButton("forward.end.fill") { player.next() }
                 }
-                .padding(.horizontal, 14)
-                .padding(.vertical, 10)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
 
                 GeometryReader { proxy in
                     ZStack(alignment: .leading) {
@@ -70,8 +93,8 @@ struct MiniPlayerView: View {
                     }
                 }
                 .frame(height: 3)
-                .padding(.horizontal, 14)
-                .padding(.bottom, 8)
+                .padding(.horizontal, 12)
+                .padding(.bottom, 7)
             }
             // Noor Glass: Liquid Glass pill (iOS 26) tinted with the
             // Quran deep green, replacing the flat fill + shadow.

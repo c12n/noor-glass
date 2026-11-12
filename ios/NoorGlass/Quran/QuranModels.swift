@@ -94,28 +94,36 @@ enum QuranLibrary {
     /// The first reciter in the catalogue (Alafasy) — the default.
     static var defaultReciter: QuranReciter? { catalogue.reciters.first }
 
-    /// The stream URL for a reciter: reciters with their own
-    /// audioBase (the Sudanese pair on the mp3quran CDN) build
-    /// "{audioBase}/{NNN}.mp3" with a zero-padded number; the
-    /// Islamic Network reciters build
-    /// "{audioBase}/{reciterId}/{number}.mp3" unpadded.
+    /// The stream URL for a reciter. Two layouts exist:
+    /// - mp3quran (the Sudanese pair, `padded` true): the files sit
+    ///   directly under the reciter's own base, zero-padded, with
+    ///   NO reciter-id segment: "{audioBase}/{NNN}.mp3".
+    /// - Islamic Network (everyone else): the reciter-id segment
+    ///   is required: "{base}/{reciterId}/{number}.mp3" unpadded,
+    ///   where base is the reciter's own audioBase when the
+    ///   catalogue carries one, else the shared catalogue base.
+    /// Build 3 fix: the v2 catalogue gives the Islamic Network
+    /// reciters their own audioBase too, and the old code treated
+    /// ANY audioBase as the mp3quran layout, dropping the
+    /// reciter-id segment. The CDN answers those URLs 403, every
+    /// player item failed, and the app was silent while showing a
+    /// playing state. `padded` is the layout discriminator, not
+    /// the mere presence of an audioBase.
     static func streamURL(surahNumber: Int, reciterId: String) -> URL? {
         guard let reciter = reciter(reciterId) else {
             return URL(string: "\(catalogue.audioBase)/\(reciterId)/\(surahNumber).mp3")
         }
-        if let base = reciter.audioBase {
-            let file = (reciter.padded ?? false)
-                ? String(format: "%03d.mp3", surahNumber)
-                : "\(surahNumber).mp3"
-            return URL(string: "\(base)/\(file)")
+        let base = reciter.audioBase ?? catalogue.audioBase
+        if reciter.padded ?? false {
+            return URL(string: "\(base)/\(String(format: "%03d.mp3", surahNumber))")
         }
-        return URL(string: "\(catalogue.audioBase)/\(reciterId)/\(surahNumber).mp3")
+        return URL(string: "\(base)/\(reciterId)/\(surahNumber).mp3")
     }
 
     // MARK: Per-ayah audio (phase 2, feature 3)
 
     /// Reciters whose per-ayah files the Islamic Network CDN
-    /// actually serves, with the bitrate that answers 200 (probed
+    /// actually serves, with the bitrate that answers 200 (verified
     /// live 2026-11-12: Alafasy at 128, Abdul Basit and Basfar at
     /// 64; Aziz Alili answers 403 at every bitrate, and the
     /// Sudanese reciters are per-surah only on mp3quran, so they

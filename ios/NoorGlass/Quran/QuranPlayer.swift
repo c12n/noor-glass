@@ -64,6 +64,11 @@ final class QuranPlayer: ObservableObject {
 
     @Published private(set) var currentSurah: QuranSurah?
     @Published private(set) var isPlaying = false
+    /// Why the current item failed to load, when it did (build 3).
+    /// Drives the failure surface in the mini player and Now
+    /// Playing: a stream that cannot load must never sit in a
+    /// fake "playing" state in silence.
+    @Published private(set) var playbackError: String?
     @Published private(set) var currentTime: TimeInterval = 0
     /// Duration of the loaded player item, once AVFoundation knows it.
     @Published private(set) var itemDuration: TimeInterval?
@@ -165,6 +170,11 @@ final class QuranPlayer: ObservableObject {
 
     private let player = AVPlayer()
     private var timeObserver: Any?
+    /// Watches the loaded item's status so a failed stream is
+    /// caught the moment it fails (build 3). The periodic time
+    /// observer cannot do this job: it never ticks for an item
+    /// whose timeline never advances.
+    private var itemStatusObservation: NSKeyValueObservation?
     private var endObserver: NSObjectProtocol?
     private var interruptionWasPlaying = false
     private var sleepTimer: Timer?
@@ -185,6 +195,34 @@ final class QuranPlayer: ObservableObject {
     /// (with the current surah first) while shuffle is on.
     private var traversal: [Int] = []
     private var traversalPos: Int = 0
+
+    // MARK: Playback health (hardening)
+
+    /// True while the player has been told to play but AVFoundation
+    /// is still waiting for data. The mini player shows a spinner
+    /// instead of a pause glyph over silence.
+    @Published private(set) var isBuffering = false
+    /// AVPlayer.timeControlStatus is the only ground truth for
+    /// "sound is coming out"; `isPlaying` is the user's intent.
+    private var timeControlObservation: NSKeyValueObservation?
+    /// A player-level failure (not an item failure) silences every
+    /// later item; nothing watched for it before this hardening.
+    private var playerStatusObservation: NSKeyValueObservation?
+    /// A stream that dies after it was ready (network drop,
+    /// truncated file) never flips item.status; it only posts
+    /// this notification.
+    private var failedToEndObserver: NSObjectProtocol?
+    /// Fires when the player has been "playing" for `stallTimeout`
+    /// seconds without AVPlayer actually playing.
+    private var stallWatchdog: DispatchWorkItem?
+    /// The last AVAudioSession error (the old `try?` discarded
+    /// these).
+    private var lastSessionError: String?
+    /// Deliberately 30 s, not 20: on slow connections a shorter
+    /// fuse false-alarms streams that are still legitimately
+    /// buffering, so the watchdog waits half a minute before
+    /// calling a stream stalled.
+    private static let stallTimeout: TimeInterval = 30
 
     init() {
         let storedReciter = defaults.string(forKey: Keys.reciter) ?? ""
@@ -289,18 +327,31 @@ final class QuranPlayer: ObservableObject {
     }
 
     func resume() {
-        guard currentSurah != nil else { return }
+        guard let surah = currentSurah else { return }
+        // A failed or stalled item never recovers in place: reload
+        // it (build 3 reloaded .failed; the hardening adds stalls,
+        // mid-stream failures and a missing item). This is the
+        // mini player's tap-to-retry path.
+        if player.currentItem == nil
+            || player.currentItem?.status == .failed
+            || playbackError != nil {
+            load(surah, startAt: currentTime, autoplay: true)
+            return
+        }
         activateSession()
         applyPlay()
         isPlaying = true
+        armStallWatchdogIfNeeded()
         persistPosition()
         updateNowPlaying()
     }
 
     func pause() {
+        cancelStallWatchdog()
         player.pause()
         player.volume = 1
         isPlaying = false
+        isBuffering = false
         flushListenStats()
         persistPosition()
         writeWidgetSnapshot(force: true)
@@ -638,8 +689,10 @@ final class QuranPlayer: ObservableObject {
     }
 
     private func finishPlayback() {
+        cancelStallWatchdog()
         player.pause()
         isPlaying = false
+        isBuffering = false
         flushListenStats()
         persistPosition()
         updateNowPlaying()
@@ -651,22 +704,72 @@ final class QuranPlayer: ObservableObject {
 
     private func load(_ surah: QuranSurah, startAt: TimeInterval, autoplay: Bool) {
         clearAyahLoop()
+        cancelStallWatchdog()
         player.volume = 1
-        let url = QuranDownloads.localFileURL(reciterId: activeReciterId, surahNumber: surah.number)
-            ?? QuranLibrary.audioURL(surahNumber: surah.number, reciterId: activeReciterId)
-        guard let url else { return }
-
         if let existingEndObserver = endObserver {
             NotificationCenter.default.removeObserver(existingEndObserver)
             endObserver = nil
         }
+        if let existingFailObserver = failedToEndObserver {
+            NotificationCenter.default.removeObserver(existingFailObserver)
+            failedToEndObserver = nil
+        }
+        let localURL = QuranDownloads.localFileURL(reciterId: activeReciterId,
+                                                   surahNumber: surah.number)
+        let remoteURL = QuranLibrary.audioURL(surahNumber: surah.number,
+                                              reciterId: activeReciterId)
+        // One line per load in the device log (Console.app, filter
+        // "QuranPlayer"), so the URL actually played is visible.
+        NSLog("%@", "[QuranPlayer] load surah=\(surah.number)"
+              + " reciter=\(activeReciterId)"
+              + " source=\(localURL != nil ? "local" : "stream")"
+              + " url=\((localURL ?? remoteURL)?.absoluteString ?? "nil")")
+        guard let url = localURL ?? remoteURL else {
+            // Before the hardening this returned silently, leaving
+            // the previous surah's item and state in place.
+            player.replaceCurrentItem(with: nil)
+            itemStatusObservation = nil
+            currentSurah = surah
+            itemDuration = nil
+            currentTime = startAt
+            handlePlaybackFailure("No audio source for \(surah.english) with this reciter.")
+            return
+        }
+
         let item = AVPlayerItem(url: url)
         endObserver = NotificationCenter.default.addObserver(
             forName: .AVPlayerItemDidPlayToEndTime, object: item, queue: .main
         ) { [weak self] _ in
             self?.handleItemEnd()
         }
+        // A stream that dies after it was ready (network drop,
+        // truncated file) never flips item.status; it only posts
+        // this notification.
+        failedToEndObserver = NotificationCenter.default.addObserver(
+            forName: .AVPlayerItemFailedToPlayToEndTime, object: item, queue: .main
+        ) { [weak self, weak item] note in
+            guard let self, let item, self.player.currentItem === item else { return }
+            let error = note.userInfo?[AVPlayerItemFailedToPlayToEndTimeErrorKey] as? Error
+            self.handlePlaybackFailure(
+                error.map(QuranPlayer.errorSummary)
+                    ?? "The stream stopped before the end of the surah.")
+        }
         player.replaceCurrentItem(with: item)
+        playbackError = nil
+        isBuffering = false
+        // .initial so a status that is already .failed when the
+        // observation starts is not missed.
+        itemStatusObservation = item.observe(
+            \.status, options: [.initial, .new]
+        ) { [weak self] observedItem, _ in
+            guard observedItem.status == .failed else { return }
+            DispatchQueue.main.async { [weak self] in
+                guard let self,
+                      self.player.currentItem === observedItem
+                else { return }
+                self.handleItemFailure(observedItem)
+            }
+        }
 
         currentSurah = surah
         itemDuration = nil
@@ -682,10 +785,58 @@ final class QuranPlayer: ObservableObject {
             activateSession()
             applyPlay()
             isPlaying = true
+            armStallWatchdogIfNeeded()
         } else {
             isPlaying = false
         }
         updateNowPlaying()
+    }
+
+    /// A stream that cannot load (CDN refusal, no network, dead
+    /// file): stop pretending to play and surface why (build 3).
+    /// Before this, the only failure handling rode the periodic
+    /// time observer, which never ticks for a failed item, so the
+    /// UI sat in a playing state over total silence.
+    private func handleItemFailure(_ item: AVPlayerItem) {
+        let parts = [item.error.map(QuranPlayer.errorSummary),
+                     QuranPlayer.errorLogSummary(of: item)].compactMap { $0 }
+        handlePlaybackFailure(parts.isEmpty
+                              ? "The audio could not be loaded."
+                              : parts.joined(separator: " / "))
+    }
+
+    /// The single exit for every kind of playback failure (item
+    /// failed, mid-stream failure, player failure, stall, missing
+    /// URL). Stops the engine so the UI cannot claim to play.
+    private func handlePlaybackFailure(_ message: String) {
+        cancelStallWatchdog()
+        player.pause()
+        isPlaying = false
+        isBuffering = false
+        playbackError = message
+        flushListenStats()
+        NSLog("%@", "[QuranPlayer] playback failed: \(message)")
+        updateNowPlaying()
+        writeWidgetSnapshot(force: true)
+    }
+
+    /// "<description> [<domain> <code>; <underlying domain> <code>]",
+    /// so a CDN refusal reads differently from a dead network.
+    private static func errorSummary(_ error: Error) -> String {
+        let ns = error as NSError
+        var text = "\(ns.localizedDescription) [\(ns.domain) \(ns.code)"
+        if let underlying = ns.userInfo[NSUnderlyingErrorKey] as? NSError {
+            text += "; \(underlying.domain) \(underlying.code)"
+        }
+        return text + "]"
+    }
+
+    /// The last entry in the item's network error log, if any. For
+    /// HTTP failures the comment usually carries the status line.
+    private static func errorLogSummary(of item: AVPlayerItem?) -> String? {
+        guard let event = item?.errorLog()?.events.last else { return nil }
+        let comment = event.errorComment.map { ": \($0)" } ?? ""
+        return "Stream error \(event.errorStatusCode) [\(event.errorDomain)]\(comment)"
     }
 
     private func handleItemEnd() {
@@ -782,9 +933,8 @@ final class QuranPlayer: ObservableObject {
                 self.flushListenStats()
             }
             if let item = self.player.currentItem {
-                if item.status == .failed, self.isPlaying {
-                    self.isPlaying = false
-                    self.updateNowPlaying()
+                if item.status == .failed, self.playbackError == nil {
+                    self.handleItemFailure(item)
                 }
                 let itemSeconds = item.duration.seconds
                 if itemSeconds.isFinite, itemSeconds > 0,
@@ -810,12 +960,100 @@ final class QuranPlayer: ObservableObject {
                 self.persistPosition()
             }
         }
+
+        // Compare intent (isPlaying) with what the engine is
+        // actually doing. KVO can arrive off the main queue; hop
+        // first.
+        timeControlObservation = player.observe(
+            \.timeControlStatus, options: [.initial, .new]
+        ) { [weak self] _, _ in
+            DispatchQueue.main.async { [weak self] in
+                self?.timeControlStatusChanged()
+            }
+        }
+        playerStatusObservation = player.observe(
+            \.status, options: [.new]
+        ) { [weak self] observedPlayer, _ in
+            guard observedPlayer.status == .failed else { return }
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                let detail = self.player.error.map(QuranPlayer.errorSummary)
+                    ?? "unknown error"
+                self.handlePlaybackFailure(
+                    "The audio engine failed (\(detail)). Quit and reopen the app.")
+            }
+        }
     }
 
-    private func activateSession() {
+    /// Never flips `isPlaying` itself: item end and repeat-one
+    /// pass through .paused for a moment, and the end-of-item
+    /// handler owns those transitions. It drives the buffering
+    /// flag and the stall watchdog instead.
+    private func timeControlStatusChanged() {
+        let buffering = isPlaying
+            && player.timeControlStatus == .waitingToPlayAtSpecifiedRate
+        if buffering != isBuffering { isBuffering = buffering }
+        armStallWatchdogIfNeeded()
+    }
+
+    /// Arms a one-shot check while the UI says "playing" but
+    /// AVPlayer is not; cancels it as soon as AVPlayer reports
+    /// .playing.
+    private func armStallWatchdogIfNeeded() {
+        guard isPlaying, player.timeControlStatus != .playing else {
+            cancelStallWatchdog()
+            return
+        }
+        guard stallWatchdog == nil else { return }
+        let work = DispatchWorkItem { [weak self] in
+            guard let self else { return }
+            self.stallWatchdog = nil
+            guard self.isPlaying,
+                  self.player.timeControlStatus != .playing else { return }
+            self.handlePlaybackFailure(self.stallDescription())
+        }
+        stallWatchdog = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + QuranPlayer.stallTimeout,
+                                      execute: work)
+    }
+
+    private func cancelStallWatchdog() {
+        stallWatchdog?.cancel()
+        stallWatchdog = nil
+    }
+
+    /// The most specific reason available for "playing, but silent".
+    private func stallDescription() -> String {
+        let item = player.currentItem
+        if let error = item?.error { return QuranPlayer.errorSummary(error) }
+        if let log = QuranPlayer.errorLogSummary(of: item) { return log }
+        if let lastSessionError { return "Audio session error: \(lastSessionError)" }
+        if item?.status == .unknown {
+            return "No response from the audio server after \(Int(QuranPlayer.stallTimeout)) s."
+        }
+        if player.timeControlStatus == .waitingToPlayAtSpecifiedRate {
+            let reason = player.reasonForWaitingToPlay?.rawValue ?? "unknown reason"
+            return "The stream isn't delivering audio (\(reason))."
+        }
+        return "Playback stopped without reporting an error."
+    }
+
+    /// Errors are kept and logged instead of discarded by `try?`,
+    /// so a stall report can name a failed activation.
+    @discardableResult
+    private func activateSession() -> Bool {
         let session = AVAudioSession.sharedInstance()
-        try? session.setCategory(.playback, mode: .spokenAudio)
-        try? session.setActive(true)
+        do {
+            try session.setCategory(.playback, mode: .spokenAudio)
+            try session.setActive(true)
+            lastSessionError = nil
+            return true
+        } catch {
+            let summary = QuranPlayer.errorSummary(error)
+            lastSessionError = summary
+            NSLog("%@", "[QuranPlayer] audio session activation failed: \(summary)")
+            return false
+        }
     }
 
     private func installAudioSessionObservers() {

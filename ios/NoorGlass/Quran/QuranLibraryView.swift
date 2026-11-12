@@ -64,8 +64,15 @@ struct QuranLibraryView: View {
 
     var body: some View {
         NavigationStack {
+            // Build 3: the header is a fixed bar above the list,
+            // not a list section. As a section it scrolled away /
+            // collapsed into the top inset on device, leaving the
+            // screen reading as a lone "..." toolbar button over a
+            // gap. Title + reciter (tap opens the picker) + stats
+            // now read as a header at all times.
+            VStack(spacing: 0) {
+                headerBar
             List {
-                headerSection
                 chipsSection
                 if bookmarksOnly {
                     bookmarksSection
@@ -117,6 +124,7 @@ struct QuranLibraryView: View {
                         .padding(.bottom, 8)
                 }
             }
+            }
         }
         .sheet(isPresented: $showNowPlaying) {
             NowPlayingView()
@@ -139,22 +147,38 @@ struct QuranLibraryView: View {
 
     // MARK: Header & chips
 
-    private var headerSection: some View {
-        Section {
-            VStack(alignment: .leading, spacing: 3) {
-                Text("Quran")
-                    .font(.largeTitle.weight(.bold))
-                Text("114 surahs | \(player.currentReciter?.name ?? "")")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                Text("\(player.completedSurahsTotal) surahs completed • \(listenedLabel) listened")
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(Theme.green)
+    /// The fixed header bar above the list (build 3): title,
+    /// the active voice as a tappable reciter picker (opens the
+    /// same Options sheet as the toolbar menu), and the listening
+    /// stats line. Always visible, so the screen never opens on a
+    /// bare toolbar button again.
+    private var headerBar: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text("Quran")
+                .font(.largeTitle.weight(.bold))
+            Button {
+                showLibraryOptions = true
+            } label: {
+                HStack(spacing: 5) {
+                    Text("114 surahs | \(player.audioLanguage == .english ? QuranLibrary.englishReciter.name : (player.currentReciter?.name ?? ""))")
+                        .lineLimit(1)
+                    Image(systemName: "chevron.up.chevron.down")
+                        .font(.caption2.weight(.bold))
+                }
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(Theme.green)
             }
-            .listRowBackground(Color.clear)
-            .listRowSeparator(.hidden)
-            .padding(.top, 4)
+            .buttonStyle(.plain)
+            Text("\(player.completedSurahsTotal) surahs completed • \(listenedLabel) listened")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 16)
+        .padding(.top, 6)
+        .padding(.bottom, 8)
+        .background(Color(uiColor: .systemBackground))
     }
 
     /// "12h 5m" / "45m" / "0m" of accumulated listening time.
@@ -759,18 +783,29 @@ private struct SurahRow: View {
             HStack(spacing: 13) {
                 numberTile
                 VStack(alignment: .leading, spacing: 2) {
+                    // Build 3 row layout: the English name owns the
+                    // line (layout priority, one line, tail
+                    // truncation); the Arabic name is fixed-size so
+                    // it can never wrap or squeeze the English into
+                    // a mid-word two-line stack ("Aal-i-Imraan").
+                    // Every row is the same height.
                     HStack(spacing: 8) {
                         Text(surah.english)
                             .font(.body.weight(.bold))
                             .foregroundStyle(isCurrent ? Theme.green : .primary)
+                            .lineLimit(1)
+                            .layoutPriority(1)
                         Text(surah.arabic)
                             .font(.body)
                             .foregroundStyle(Theme.deepGreen)
+                            .lineLimit(1)
+                            .fixedSize(horizontal: true, vertical: false)
                         if isFridayPick {
                             Text("FRIDAY PICK")
                                 .font(.system(size: 9, weight: .heavy))
                                 .tracking(0.6)
                                 .foregroundStyle(Theme.green)
+                                .lineLimit(1)
                         }
                         if isCurrent {
                             Image(systemName: player.isPlaying
@@ -779,7 +814,11 @@ private struct SurahRow: View {
                                 .foregroundStyle(Theme.green)
                         }
                     }
-                    Text("\(surah.meaning) | \(surah.ayahs) ayahs | \(surah.revelation)")
+                    // Build 3: meaning + ayah count only. The
+                    // revelation place ("Makki"/"Madani") was the
+                    // piece truncated mid-word ("Ma..."); it is
+                    // dropped from the row rather than cut off.
+                    Text("\(surah.meaning) | \(surah.ayahs) ayahs")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
@@ -789,6 +828,8 @@ private struct SurahRow: View {
                     Text(QuranLibrary.formatDuration(seconds))
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                        .fixedSize(horizontal: true, vertical: false)
                 }
             }
             .contentShape(Rectangle())

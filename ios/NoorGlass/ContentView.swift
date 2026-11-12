@@ -3,10 +3,11 @@
 //  Noor Glass
 //
 //  Root shell: an iOS 26 Liquid Glass tab bar (the system glass tab
-//  bar, minimizing on scroll) with Library, Bookmarks and About
-//  tabs, and the glass mini player as the tab bar's bottom
-//  accessory whenever a surah is loaded. Tapping the mini player
-//  opens Now Playing as a sheet.
+//  bar, minimizing on scroll) with Library, Mushaf, Search,
+//  Bookmarks and You tabs, and the glass mini player as a bottom
+//  safe-area inset of each tab's content (its own full-width row
+//  above the tab bar, build 3) whenever a surah is loaded.
+//  Tapping the mini player opens Now Playing as a sheet.
 //
 //  Copyright (c) 2026 c12n Apps
 //
@@ -26,18 +27,23 @@ struct ContentView: View {
         TabView(selection: $selectedTab) {
             Tab("Library", systemImage: "books.vertical.fill", value: 0) {
                 QuranLibraryView(embeddedInTab: true)
+                    .modifier(MiniPlayerInset { showNowPlaying = true })
             }
             Tab("Mushaf", systemImage: "book", value: 1) {
                 MushafView(openPlayer: { showNowPlaying = true })
+                    .modifier(MiniPlayerInset { showNowPlaying = true })
             }
             Tab("Search", systemImage: "magnifyingglass", value: 2, role: .search) {
                 QuranSearchView(openPlayer: { showNowPlaying = true })
+                    .modifier(MiniPlayerInset { showNowPlaying = true })
             }
             Tab("Bookmarks", systemImage: "bookmark.fill", value: 3) {
                 BookmarksTabView(openPlayer: { showNowPlaying = true })
+                    .modifier(MiniPlayerInset { showNowPlaying = true })
             }
             Tab("You", systemImage: "person.crop.circle.fill", value: 4) {
                 AboutView(openPlayer: { showNowPlaying = true })
+                    .modifier(MiniPlayerInset { showNowPlaying = true })
             }
         }
         .environmentObject(themeStore)
@@ -46,14 +52,32 @@ struct ContentView: View {
         .id(themeStore.revision)
         .onAppear { DailyReminder.reschedule() }
         .tabBarMinimizeBehavior(.onScrollDown)
-        .tabViewBottomAccessory {
-            if player.currentSurah != nil {
-                MiniPlayerView { showNowPlaying = true }
-                    .padding(.horizontal, 8)
-            }
-        }
         .sheet(isPresented: $showNowPlaying) {
             NowPlayingView()
+        }
+    }
+}
+
+/// Build 3: hosts the mini player as a bottom safe-area inset of
+/// each tab's root view, so it always gets its own full-width row
+/// directly above the tab bar. Both earlier attachments failed on
+/// device: the tab bar's bottom accessory squeezed the pill into
+/// the strip between the tab buttons (tile overlapping the
+/// transport controls), and an inset on the TabView itself laid
+/// the pill over the floating tab bar. An inset on the tab content
+/// is the placement that respects the tab bar's space.
+private struct MiniPlayerInset: ViewModifier {
+    @EnvironmentObject private var player: QuranPlayer
+    let onOpen: () -> Void
+
+    func body(content: Content) -> some View {
+        content.safeAreaInset(edge: .bottom) {
+            if player.currentSurah != nil {
+                MiniPlayerView(onOpen: onOpen)
+                    .padding(.horizontal, 12)
+                    .padding(.top, 6)
+                    .padding(.bottom, 2)
+            }
         }
     }
 }

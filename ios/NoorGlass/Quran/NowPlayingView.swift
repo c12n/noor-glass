@@ -340,6 +340,9 @@ private struct SpotifyNowPlayingView: View {
                     .padding(.top, 14)
                     .modifier(TrackSwipeModifier(dismissDragY: $dismissDragY))
                     titleRow(surah)
+                    if player.playbackError != nil {
+                        playbackErrorBanner
+                    }
                     ThinScrubber(foreground: .white, timeColor: onGradientMuted)
                         .padding(.top, 18)
                     transport
@@ -451,6 +454,26 @@ private struct SpotifyNowPlayingView: View {
             .buttonStyle(.plain)
         }
         .padding(.top, 22)
+    }
+
+    /// Build 3 failure surface: shown when the current stream
+    /// failed to load, so the player never sits in a fake playing
+    /// state in silence. The transport's play button retries (the
+    /// player reloads a failed item on resume).
+    private var playbackErrorBanner: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "exclamationmark.triangle.fill")
+            Text("Couldn't load this surah's audio. Check your connection, then tap play to try again.")
+                .font(.caption.weight(.semibold))
+                .fixedSize(horizontal: false, vertical: true)
+            Spacer(minLength: 0)
+        }
+        .foregroundStyle(.white)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 9)
+        .background(Color(red: 0.72, green: 0.18, blue: 0.16),
+                    in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .padding(.top, 12)
     }
 
     private var transport: some View {
