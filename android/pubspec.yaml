@@ -1,0 +1,31 @@
+name: noor_glass
+description: "Noor Glass | a standalone Quran listening and reading app: 114 surahs, Arabic recitation and English narration, lyrics with tap to seek, memorization loop, bookmarks, offline downloads and a sleep timer."
+publish_to: 'none'
+version: 1.1.0+2
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+  flutter: '>=3.22.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  shared_preferences: ^2.3.2
+  just_audio: ^0.9.46
+  audio_service: ^0.18.15
+  path_provider: ^2.1.5
+  dynamic_color: ^1.7.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/quran/surahs.json
+    - assets/quran/quran_text.json
+    - assets/quran/en_durations.json
+    - assets/quran/mushaf_meta.json
+    - assets/quran/word_by_word.json
