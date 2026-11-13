@@ -1248,8 +1248,18 @@ class NowPlayingPage extends StatelessWidget {
               SliderTheme(
                 data: SliderTheme.of(context).copyWith(
                   activeTrackColor: sleeve.accent,
-                  thumbColor: sleeve.accent,
                   inactiveTrackColor: sleeve.onSleeve.withValues(alpha: 0.25),
+                  trackHeight: 4,
+                  // Build 1.1.1: a proper Spotify-style knob. The
+                  // Material 3 default thumb is a narrow pill that
+                  // reads as no thumb at all; use a round, light
+                  // thumb with a soft accent halo while dragging.
+                  thumbColor: sleeve.onSleeve,
+                  thumbShape: const RoundSliderThumbShape(
+                      enabledThumbRadius: 11, disabledThumbRadius: 11),
+                  overlayColor: sleeve.accent.withValues(alpha: 0.18),
+                  overlayShape:
+                      const RoundSliderOverlayShape(overlayRadius: 20),
                 ),
                 child: Slider(
                   value: duration > 0

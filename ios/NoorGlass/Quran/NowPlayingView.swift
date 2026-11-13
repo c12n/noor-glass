@@ -243,12 +243,20 @@ struct PlayerScrubber: View {
     }
 }
 
-/// Spotify's hairline scrubber: a thin bar, dragged to seek.
+/// Spotify-style scrubber (build 4): a thin bar with a clearly
+/// visible round knob riding the end of the filled portion, the
+/// way the reference music players draw it. Dragging moves the
+/// knob and the elapsed label together and the seek lands on
+/// release; a tap anywhere on the track seeks straight there.
 struct ThinScrubber: View {
     @EnvironmentObject private var player: QuranPlayer
     @State private var dragFraction: Double?
     var foreground: Color
     var timeColor: Color
+
+    /// Spotify's knob is ~13 pt: big enough to see and grab,
+    /// small enough to sit on the hairline track.
+    private let knobDiameter: CGFloat = 13
 
     private var fraction: Double {
         if let dragFraction { return dragFraction }
@@ -259,13 +267,28 @@ struct ThinScrubber: View {
     var body: some View {
         VStack(spacing: 6) {
             GeometryReader { proxy in
+                // The knob stays fully inside the track: its
+                // centre travels from its own radius to the far
+                // end minus the radius, and the fill reaches the
+                // knob's centre.
+                let knobX = knobDiameter / 2
+                    + fraction * max(0, proxy.size.width - knobDiameter)
                 ZStack(alignment: .leading) {
                     Capsule().fill(foreground.opacity(0.3))
+                        .frame(height: 4)
                     Capsule().fill(foreground)
-                        .frame(width: proxy.size.width * fraction)
+                        .frame(width: knobX, height: 4)
+                    Circle()
+                        .fill(.white)
+                        .frame(width: knobDiameter, height: knobDiameter)
+                        .shadow(color: .black.opacity(0.35), radius: 3, y: 1)
+                        .scaleEffect(dragFraction == nil ? 1 : 1.3)
+                        .offset(x: knobX - knobDiameter / 2)
+                        .animation(.easeOut(duration: 0.15),
+                                   value: dragFraction == nil)
                 }
-                .frame(height: 4)
-                .contentShape(Rectangle().inset(by: -8))
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .contentShape(Rectangle().inset(by: -6))
                 .gesture(
                     DragGesture(minimumDistance: 0)
                         .onChanged { value in
@@ -279,7 +302,7 @@ struct ThinScrubber: View {
                             player.seek(to: target * player.duration)
                         })
             }
-            .frame(height: 4)
+            .frame(height: 16)
             HStack {
                 Text(QuranLibrary.formatDuration(displayedTime))
                 Spacer()
